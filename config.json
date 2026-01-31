@@ -1,0 +1,46 @@
+{
+  "whisper": {
+    "model_size": "large-v3-turbo",
+    "compute_type": "float16",
+    "device": "cuda",
+    "device_index": 0,
+    "beam_size": 5,
+    "vad_filter": true,
+    "language": null
+  },
+  "llm": {
+    "model_path": "models/Llama-3.1-8B-Q8_0.gguf",
+    "n_ctx": 4096,
+    "n_gpu_layers": -1,
+    "n_batch": 512,
+    "flash_attn": true,
+    "verbose": false
+  },
+  "audio": {
+    "sample_rate": 16000,
+    "channels": 1,
+    "dtype": "float32",
+    "blocksize": 1024,
+    "vad_threshold": 0.5,
+    "min_speech_duration_ms": 250,
+    "max_speech_duration_s": 30.0,
+    "speech_pad_ms": 100
+  },
+  "hotkeys": {
+    "record_hotkey": "ctrl+space",
+    "cycle_style_hotkey": "ctrl+shift+s",
+    "quit_hotkey": "ctrl+shift+q"
+  },
+  "ui": {
+    "show_hud": true,
+    "hud_position": "top",
+    "hud_opacity": 0.85,
+    "indicator_color": "#FF4444",
+    "indicator_size": 12
+  },
+  "style": "professional",
+  "enable_refinement": true,
+  "fallback_on_error": true,
+  "log_level": "INFO",
+  "dictation_map_path": "dictation_map.json"
+}

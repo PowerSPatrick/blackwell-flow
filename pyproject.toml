@@ -1,0 +1,85 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blackwell-flow"
+version = "0.1.0"
+description = "System-wide AI dictation utility with LLM refinement"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.12"
+authors = [
+    {name = "Blackwell-Flow Team"}
+]
+keywords = ["dictation", "speech-to-text", "whisper", "llm", "cuda"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: GPU :: NVIDIA CUDA",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "torch>=2.5.0",
+    "torchaudio>=2.5.0",
+    "faster-whisper>=1.1.0",
+    "llama-cpp-python>=0.3.0",
+    "sounddevice>=0.5.0",
+    "numpy>=2.0.0",
+    "pynput>=1.7.0",
+    "pyautogui>=0.9.0",
+    "pyperclip>=1.9.0",
+    "PyQt6>=6.7.0",
+    "structlog>=24.0.0",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-qt>=4.4.0",
+    "mypy>=1.13.0",
+    "ruff>=0.8.0",
+]
+
+[project.scripts]
+blackwell-flow = "blackwell_flow.app:main"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/blackwell-flow"
+Documentation = "https://github.com/yourusername/blackwell-flow#readme"
+Repository = "https://github.com/yourusername/blackwell-flow.git"
+Issues = "https://github.com/yourusername/blackwell-flow/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["blackwell_flow*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM"]
+ignore = ["E501"]

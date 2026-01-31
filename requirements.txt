@@ -1,0 +1,35 @@
+# Blackwell-Flow Dependencies
+# Python 3.12+ required
+
+# Core ML/AI
+torch==2.5.1+cu128
+torchaudio==2.5.1+cu128
+faster-whisper==1.1.0
+llama-cpp-python==0.3.4
+
+# Audio Processing
+sounddevice==0.5.1
+numpy==2.1.3
+silero-vad==5.1
+
+# OS Integration
+pynput==1.7.7
+pyautogui==0.9.54
+pyperclip==1.9.0
+
+# GUI
+PyQt6==6.8.0
+PyQt6-Qt6==6.8.0
+
+# Utilities
+structlog==24.4.0
+pydantic==2.10.2
+pydantic-settings==2.6.1
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-qt==4.4.0
+
+# Type checking
+mypy==1.13.0
