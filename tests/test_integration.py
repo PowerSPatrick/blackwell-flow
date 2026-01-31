@@ -18,6 +18,15 @@ from blackwell_flow.text_injector import AsyncTextInjector
 
 from .conftest import audio_to_wav_bytes, generate_speech_like_audio
 
+# Check if ML dependencies are available
+ml_deps_available = False
+try:
+    from faster_whisper import WhisperModel
+    from llama_cpp import Llama
+    ml_deps_available = True
+except ImportError:
+    pass
+
 
 class TestAsyncAudioRecorder:
     """Tests for AsyncAudioRecorder."""
@@ -49,6 +58,7 @@ class TestAsyncAudioRecorder:
 class TestAsyncInferenceEngine:
     """Tests for AsyncInferenceEngine."""
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @pytest.mark.asyncio
     @patch("blackwell_flow.inference_engine.Llama")
     @patch("blackwell_flow.inference_engine.WhisperModel")
@@ -66,6 +76,7 @@ class TestAsyncInferenceEngine:
         mock_llama.assert_called_once()
         assert engine.is_loaded is True
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @pytest.mark.asyncio
     @patch("blackwell_flow.inference_engine.Llama")
     @patch("blackwell_flow.inference_engine.WhisperModel")
@@ -123,6 +134,7 @@ class TestAsyncTextInjector:
 class TestFullPipeline:
     """Integration tests for the full pipeline."""
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @pytest.mark.asyncio
     @patch("blackwell_flow.text_injector.time.sleep")
     @patch("blackwell_flow.text_injector.pyautogui")
@@ -168,6 +180,7 @@ class TestFullPipeline:
         # Verify injection happened
         mock_pyautogui.hotkey.assert_called_with("ctrl", "v")
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @pytest.mark.asyncio
     @patch("blackwell_flow.inference_engine.Llama")
     @patch("blackwell_flow.inference_engine.WhisperModel")
@@ -219,6 +232,7 @@ class TestFullPipeline:
         assert "PyTorch" in raw_transcript
         assert "CUDA" in raw_transcript
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @pytest.mark.asyncio
     @patch("blackwell_flow.inference_engine.Llama")
     @patch("blackwell_flow.inference_engine.WhisperModel")
@@ -259,6 +273,7 @@ class TestFullPipeline:
 class TestLatencyRequirements:
     """Tests to verify latency requirements are met."""
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @pytest.mark.asyncio
     @patch("blackwell_flow.text_injector.time.sleep")
     @patch("blackwell_flow.text_injector.pyautogui")

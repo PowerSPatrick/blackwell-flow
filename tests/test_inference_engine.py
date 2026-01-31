@@ -4,12 +4,22 @@ Tests for inference engine.
 
 from __future__ import annotations
 
+import sys
 from unittest.mock import MagicMock, patch
 
 import pytest
 
 from blackwell_flow.config import AppConfig, LLMConfig, WhisperConfig
 from blackwell_flow.inference_engine import InferenceEngine, LLMEngine, WhisperEngine
+
+# Check if ML dependencies are available
+ml_deps_available = False
+try:
+    from faster_whisper import WhisperModel
+    from llama_cpp import Llama
+    ml_deps_available = True
+except ImportError:
+    pass
 
 
 class TestWhisperEngine:
@@ -23,6 +33,7 @@ class TestWhisperEngine:
         assert engine._model is None
         assert engine.is_loaded is False
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @patch("blackwell_flow.inference_engine.WhisperModel")
     def test_load(
         self,
@@ -41,6 +52,7 @@ class TestWhisperEngine:
         )
         assert engine.is_loaded is True
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @patch("blackwell_flow.inference_engine.WhisperModel")
     def test_transcribe(
         self,
@@ -84,6 +96,7 @@ class TestLLMEngine:
         assert engine._model is None
         assert engine.is_loaded is False
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @patch("blackwell_flow.inference_engine.Llama")
     def test_load(
         self,
@@ -104,6 +117,7 @@ class TestLLMEngine:
         )
         assert engine.is_loaded is True
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @patch("blackwell_flow.inference_engine.Llama")
     def test_refine(
         self,
@@ -139,6 +153,7 @@ class TestLLMEngine:
 class TestInferenceEngine:
     """Tests for combined InferenceEngine."""
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @patch("blackwell_flow.inference_engine.Llama")
     @patch("blackwell_flow.inference_engine.WhisperModel")
     def test_load_models(
@@ -173,6 +188,7 @@ class TestInferenceEngine:
 
         assert result == "I use PyTorch with CUDA for training."
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @patch("blackwell_flow.inference_engine.Llama")
     @patch("blackwell_flow.inference_engine.WhisperModel")
     def test_process_full_pipeline(
@@ -200,6 +216,7 @@ class TestInferenceEngine:
         assert isinstance(final_text, str)
         assert isinstance(raw_transcript, str)
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @patch("blackwell_flow.inference_engine.Llama")
     @patch("blackwell_flow.inference_engine.WhisperModel")
     def test_process_without_refinement(
@@ -229,6 +246,7 @@ class TestInferenceEngine:
         # LLM should not be called
         mock_llm_model.assert_not_called()
 
+    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @patch("blackwell_flow.inference_engine.Llama")
     @patch("blackwell_flow.inference_engine.WhisperModel")
     def test_process_fallback_on_llm_error(
