@@ -18,15 +18,6 @@ from blackwell_flow.text_injector import AsyncTextInjector
 
 from .conftest import audio_to_wav_bytes, generate_speech_like_audio
 
-# Check if ML dependencies are available
-ml_deps_available = False
-try:
-    from faster_whisper import WhisperModel
-    from llama_cpp import Llama
-    ml_deps_available = True
-except ImportError:
-    pass
-
 
 class TestAsyncAudioRecorder:
     """Tests for AsyncAudioRecorder."""
@@ -58,10 +49,9 @@ class TestAsyncAudioRecorder:
 class TestAsyncInferenceEngine:
     """Tests for AsyncInferenceEngine."""
 
-    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @pytest.mark.asyncio
-    @patch("blackwell_flow.inference_engine.Llama")
-    @patch("blackwell_flow.inference_engine.WhisperModel")
+    @patch("llama_cpp.Llama")
+    @patch("faster_whisper.WhisperModel")
     async def test_load_models(
         self,
         mock_whisper: MagicMock,
@@ -76,10 +66,9 @@ class TestAsyncInferenceEngine:
         mock_llama.assert_called_once()
         assert engine.is_loaded is True
 
-    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @pytest.mark.asyncio
-    @patch("blackwell_flow.inference_engine.Llama")
-    @patch("blackwell_flow.inference_engine.WhisperModel")
+    @patch("llama_cpp.Llama")
+    @patch("faster_whisper.WhisperModel")
     async def test_process(
         self,
         mock_whisper_class: MagicMock,
@@ -134,13 +123,12 @@ class TestAsyncTextInjector:
 class TestFullPipeline:
     """Integration tests for the full pipeline."""
 
-    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @pytest.mark.asyncio
     @patch("blackwell_flow.text_injector.time.sleep")
     @patch("blackwell_flow.text_injector.pyautogui")
     @patch("blackwell_flow.text_injector.pyperclip")
-    @patch("blackwell_flow.inference_engine.Llama")
-    @patch("blackwell_flow.inference_engine.WhisperModel")
+    @patch("llama_cpp.Llama")
+    @patch("faster_whisper.WhisperModel")
     async def test_transcribe_and_inject(
         self,
         mock_whisper_class: MagicMock,
@@ -180,10 +168,9 @@ class TestFullPipeline:
         # Verify injection happened
         mock_pyautogui.hotkey.assert_called_with("ctrl", "v")
 
-    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @pytest.mark.asyncio
-    @patch("blackwell_flow.inference_engine.Llama")
-    @patch("blackwell_flow.inference_engine.WhisperModel")
+    @patch("llama_cpp.Llama")
+    @patch("faster_whisper.WhisperModel")
     async def test_pipeline_with_dictation_map(
         self,
         mock_whisper_class: MagicMock,
@@ -232,10 +219,9 @@ class TestFullPipeline:
         assert "PyTorch" in raw_transcript
         assert "CUDA" in raw_transcript
 
-    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @pytest.mark.asyncio
-    @patch("blackwell_flow.inference_engine.Llama")
-    @patch("blackwell_flow.inference_engine.WhisperModel")
+    @patch("llama_cpp.Llama")
+    @patch("faster_whisper.WhisperModel")
     async def test_pipeline_fallback_on_error(
         self,
         mock_whisper_class: MagicMock,
@@ -273,13 +259,12 @@ class TestFullPipeline:
 class TestLatencyRequirements:
     """Tests to verify latency requirements are met."""
 
-    @pytest.mark.skipif(not ml_deps_available, reason="ML dependencies not installed")
     @pytest.mark.asyncio
     @patch("blackwell_flow.text_injector.time.sleep")
     @patch("blackwell_flow.text_injector.pyautogui")
     @patch("blackwell_flow.text_injector.pyperclip")
-    @patch("blackwell_flow.inference_engine.Llama")
-    @patch("blackwell_flow.inference_engine.WhisperModel")
+    @patch("llama_cpp.Llama")
+    @patch("faster_whisper.WhisperModel")
     async def test_pipeline_latency(
         self,
         mock_whisper_class: MagicMock,

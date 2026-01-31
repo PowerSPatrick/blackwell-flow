@@ -5,7 +5,6 @@ Tests for audio engine.
 from __future__ import annotations
 
 import io
-import sys
 import wave
 from unittest.mock import MagicMock, patch
 
@@ -16,14 +15,6 @@ from blackwell_flow.audio_engine import AudioRecorder, SileroVAD
 from blackwell_flow.config import AudioConfig
 
 from .conftest import audio_to_wav_bytes, generate_sine_wave, generate_speech_like_audio
-
-# Check if torch is available
-torch_available = False
-try:
-    import torch
-    torch_available = True
-except ImportError:
-    pass
 
 
 class TestSileroVAD:
@@ -36,7 +27,6 @@ class TestSileroVAD:
         assert vad.threshold == 0.6
         assert vad._model is None
 
-    @pytest.mark.skipif(not torch_available, reason="torch not installed")
     @patch("torch.hub.load")
     def test_load(self, mock_hub_load: MagicMock) -> None:
         """Test VAD model loading."""
@@ -50,7 +40,6 @@ class TestSileroVAD:
         mock_hub_load.assert_called_once()
         assert vad._model is not None
 
-    @pytest.mark.skipif(not torch_available, reason="torch not installed")
     @patch("torch.hub.load")
     def test_is_speech_with_speech(self, mock_hub_load: MagicMock) -> None:
         """Test speech detection with speech audio."""
@@ -67,7 +56,6 @@ class TestSileroVAD:
 
         assert result is True
 
-    @pytest.mark.skipif(not torch_available, reason="torch not installed")
     @patch("torch.hub.load")
     def test_is_speech_with_silence(self, mock_hub_load: MagicMock) -> None:
         """Test speech detection with silence."""
